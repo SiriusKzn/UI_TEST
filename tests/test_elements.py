@@ -2,7 +2,7 @@ import time
 
 import allure
 from data.data import PersonInfo, Person
-from pages.elements_page import TextBoxPage, CheckBoxPage, RadioButtonPage, WebTablePage
+from pages.elements_page import TextBoxPage, CheckBoxPage, RadioButtonPage, WebTablePage, ButtonsPage
 
 
 @allure.suite("Test Elements")
@@ -80,6 +80,7 @@ class TestElements:
             result_data = web_table_page.check_search_person()
             assert updated_person_info == result_data, "Person card has not been changed"
 
+        @allure.feature("Check delete person")
         def test_web_table_delete_person(self, driver):
             web_table_page = WebTablePage(driver, "https://demoqa.com/webtables")
             web_table_page.open()
@@ -89,6 +90,7 @@ class TestElements:
             text = web_table_page.check_empty_table()
             assert text == "No rows found"
 
+        @allure.feature("Check change count rows.")
         def test_web_table_change_count_rows(self, driver):
             web_table_page = WebTablePage(driver, "https://demoqa.com/webtables")
             web_table_page.open()
@@ -96,6 +98,30 @@ class TestElements:
             count = [5, 10, 20, 25, 50, 100]
             result_data = web_table_page.select_up_to_some_rows(count, driver)
             assert result_data == count, "The number of rows in the table has been changed or has been incorrectly"
+
+    @allure.feature("ButtonsPage")
+    class TestButtonsPage:
+        @allure.feature("Check double click.")
+        def test_double_click_on_the_buttons(self, driver):
+            button_page = ButtonsPage(driver, "https://demoqa.com/buttons")
+            button_page.open()
+            msg = button_page.click_on_different_button("double")
+            assert msg == "You have done a double click"
+
+        @allure.feature("Check right click.")
+        def test_right_click_on_the_buttons(self, driver):
+            button_page = ButtonsPage(driver, "https://demoqa.com/buttons")
+            button_page.open()
+            msg = button_page.click_on_different_button("right")
+            assert msg == "You have done a right click"
+
+        @allure.feature("Check click.")
+        def test_dynamic_click_on_the_buttons(self, driver):
+            button_page = ButtonsPage(driver, "https://demoqa.com/buttons")
+            button_page.open()
+            msg = button_page.click_on_different_button("click")
+            assert msg == "You have done a dynamic click"
+
 
 
 

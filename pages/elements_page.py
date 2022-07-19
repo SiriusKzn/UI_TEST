@@ -6,7 +6,7 @@ from selenium.webdriver.common.by import By
 from data.data import PersonInfo
 from generator.generator import generated_person
 from locators.elements_page_locators import TextBoxPageLocators, CheckBoxPageLocators, RadioButtonPageLocators, \
-    WebTablePageLocators
+    WebTablePageLocators, ButtonsPageLocators
 from pages.base_page import BasePage
 
 
@@ -196,5 +196,20 @@ class WebTablePage(BasePage):
             data.append(len(self.get_full_table()))
         return data
 
+class  ButtonsPage(BasePage):
 
+    locators = ButtonsPageLocators()
 
+    def click_on_different_button(self, type_click):
+        if type_click == "double":
+            self.action_double_click(self.element_is_visible(self.locators.DOUBLE_CLICK_BUTTON))
+            return self.get_msg_after_click(self.locators.DOUBLE_CLICK_MSG)
+        if type_click == "right":
+            self.action_right_click(self.element_is_visible(self.locators.RIGHT_CLICK_BUTTON))
+            return self.get_msg_after_click(self.locators.RIGHT_CLICK_MSG)
+        if type_click == "click":
+            self.element_is_visible(self.locators.CLICK_BUTTON).click()
+            return self.get_msg_after_click(self.locators.CLICK_MSG)
+
+    def get_msg_after_click(self, element):
+        return self.element_is_presence(element).text

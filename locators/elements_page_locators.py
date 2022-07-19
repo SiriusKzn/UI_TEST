@@ -51,3 +51,10 @@ class WebTablePageLocators:
     EMPTY_TABLE_TEXT = (By.CSS_SELECTOR, "div[class='rt-noData']")
     SELECTOR_SIZE_TABLE = (By.CSS_SELECTOR, "select[aria-label='rows per page']")
 
+class ButtonsPageLocators:
+    DOUBLE_CLICK_BUTTON = (By.CSS_SELECTOR, "button[id='doubleClickBtn']")
+    RIGHT_CLICK_BUTTON = (By.CSS_SELECTOR, "button[id='rightClickBtn']")
+    CLICK_BUTTON = (By.XPATH, "//div[3]/button")
+    DOUBLE_CLICK_MSG = (By.CSS_SELECTOR, "p[id='doubleClickMessage']")
+    RIGHT_CLICK_MSG = (By.CSS_SELECTOR, "p[id='rightClickMessage']")
+    CLICK_MSG = (By.CSS_SELECTOR, "p[id='dynamicClickMessage']")
