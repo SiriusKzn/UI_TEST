@@ -135,7 +135,7 @@ class WebTablePage(BasePage):
         self.element_is_visible(self.locators.SUBMIT_BUTTON).click()
         return [first_name, last_name, str(age), email, str(salary), department]
 
-    def check_add_new_person(self):
+    def get_full_table(self):
         person_list = self.elements_are_present(self.locators.FULL_PERSON_TABLE)
         data_list = []
         for item in person_list:
@@ -143,9 +143,58 @@ class WebTablePage(BasePage):
         return data_list
 
     def search_some_person(self, keyword):
+        self.element_is_visible(self.locators.SEARCH_BOX).clear()
         self.element_is_visible(self.locators.SEARCH_BOX).send_keys(keyword)
 
     def check_search_person(self):
         delete_button = self.element_is_visible(self.locators.DELETE_BUTTON)
         row = delete_button.find_element_by_xpath(self.locators.ROW_PARENT)
         return row.text.splitlines()
+
+    def update_person_info(self):
+        update_button = self.element_is_visible(self.locators.EDIT_BUTTON)
+        update_button.click()
+        person_info = next(generated_person())
+        first_name = person_info.first_name
+        last_name = person_info.last_name
+        email = person_info.email
+        age = person_info.age
+        salary = person_info.salary
+        department = person_info.department
+        self.element_is_visible(self.locators.FIRSTNAME_FORM).clear()
+        self.element_is_visible(self.locators.FIRSTNAME_FORM).send_keys(first_name)
+        self.element_is_visible(self.locators.LASTNAME_FORM).clear()
+        self.element_is_visible(self.locators.LASTNAME_FORM).send_keys(last_name)
+        self.element_is_visible(self.locators.EMAIL_FORM).clear()
+        self.element_is_visible(self.locators.EMAIL_FORM).send_keys(email)
+        self.element_is_visible(self.locators.AGE_FORM).clear()
+        self.element_is_visible(self.locators.AGE_FORM).send_keys(age)
+        self.element_is_visible(self.locators.SALARY_FORM).clear()
+        self.element_is_visible(self.locators.SALARY_FORM).send_keys(salary)
+        self.element_is_visible(self.locators.DEPARTMENT_FORM).clear()
+        self.element_is_visible(self.locators.DEPARTMENT_FORM).send_keys(department)
+        self.element_is_visible(self.locators.SUBMIT_BUTTON).click()
+        return [first_name, last_name, str(age), email, str(salary), department]
+
+    def delete_person(self):
+        self.element_is_visible(self.locators.DELETE_BUTTON).click()
+
+    def check_empty_table(self):
+        return self.element_is_presence(self.locators.EMPTY_TABLE_TEXT).text
+
+    def select_up_to_some_rows(self, count, driver):
+        count = [5, 10, 20, 25, 50, 100]
+        capture_path = 'C:/capture/your_desired_filename.png'
+        driver.save_screenshot(capture_path)
+        data = []
+        count_row_button = self.element_is_visible(self.locators.SELECTOR_SIZE_TABLE)
+        for i in count:
+            self.go_to_elements(count_row_button)
+            count_row_button.click()
+            self.element_is_visible((By.CSS_SELECTOR, f'option[value="{i}"]')).click()
+            driver.save_screenshot(capture_path)
+            data.append(len(self.get_full_table()))
+        return data
+
+
+

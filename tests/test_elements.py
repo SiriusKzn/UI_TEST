@@ -58,7 +58,7 @@ class TestElements:
             web_table_page = WebTablePage(driver, "https://demoqa.com/webtables")
             web_table_page.open()
             new_person = web_table_page.add_new_persons()
-            result_list = web_table_page.check_add_new_person()
+            result_list = web_table_page.get_full_table()
             assert new_person in result_list
 
         @allure.feature("Check search person")
@@ -69,5 +69,35 @@ class TestElements:
             web_table_page.search_some_person(new_person)
             table_date = web_table_page.check_search_person()
             assert new_person in table_date, "Person was not found in table."
+        @allure.feature("Check Update Person")
+        def test_web_table_update(self, driver):
+            web_table_page = WebTablePage(driver, "https://demoqa.com/webtables")
+            web_table_page.open()
+            new_person = web_table_page.add_new_persons()
+            web_table_page.search_some_person(new_person[0])
+            updated_person_info = web_table_page.update_person_info()
+            web_table_page.search_some_person(updated_person_info[0])
+            result_data = web_table_page.check_search_person()
+            assert updated_person_info == result_data, "Person card has not been changed"
+
+        def test_web_table_delete_person(self, driver):
+            web_table_page = WebTablePage(driver, "https://demoqa.com/webtables")
+            web_table_page.open()
+            email = web_table_page.add_new_persons()[3]
+            web_table_page.search_some_person(email)
+            web_table_page.delete_person()
+            text = web_table_page.check_empty_table()
+            assert text == "No rows found"
+
+        def test_web_table_change_count_rows(self, driver):
+            web_table_page = WebTablePage(driver, "https://demoqa.com/webtables")
+            web_table_page.open()
+            web_table_page.remove_footer()
+            count = [5, 10, 20, 25, 50, 100]
+            result_data = web_table_page.select_up_to_some_rows(count, driver)
+            assert result_data == count, "The number of rows in the table has been changed or has been incorrectly"
+
+
+
 
 
